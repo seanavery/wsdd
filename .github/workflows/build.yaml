@@ -1,0 +1,25 @@
+name: Build wsdd
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flex bison byacc make cmake m4
+          sudo apt-get install -y gsoap libgsoap-dev
+      - name: Build binary
+        run: |
+          cmake -B build . -DUSE_GSOAP_STATIC_LIB=1
+          cmake --build build
